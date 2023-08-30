@@ -26,20 +26,20 @@ local function buildAttachmentMap(character)
 	-- NOTE: GetConnectedParts doesn't work until parts have been parented to Workspace, so
 	-- we can't use it (unless we want to have that silly restriction for creating ragdolls)
 	for _, part in pairs(character:GetChildren()) do
-		if not part:IsA("BasePart") then return end
+		if not part:IsA("BasePart") then continue end
 
 		for _, attachment in pairs(part:GetChildren()) do
-			if not attachment:IsA("Attachment") then return end
+			if not attachment:IsA("Attachment") then continue end
 
 			local jointName = attachment.Name:match("^(.+)RigAttachment$")
 			local joint = jointName and attachment.Parent:FindFirstChild(jointName) or nil
 
-			if not joint then return end
+			if not joint then continue end
 
 			local Attachment0 = joint.Part0:FindFirstChild(attachment.Name);
 			local Attachment1 = joint.Part1:FindFirstChild(attachment.Name);
 
-			if not Attachment0 or not Attachment1 then return end
+			if not Attachment0 or not Attachment1 then continue end
 
 			attachmentMap[attachment.Name] = {
 				Joint = joint,
