@@ -41,12 +41,12 @@ for _, v in pairs(script:GetChildren()) do
 	constraints[v.Name] = v
 end
 
-function getConstraintTemplate(jointName)
+local function getConstraintTemplate(jointName)
 	jointName = getLastWordFromPascaleCase(jointName)
 	return constraints[jointName] or constraints.Default
 end
 
-function createConstraint(jointData)
+local function createConstraint(jointData)
 	local jointName = jointData.Joint.Name
 	local constraint = getConstraintTemplate(jointName):Clone()
 
