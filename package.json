@@ -23,6 +23,7 @@
 	"license": "ISC",
 	"types": "out/index.d.ts",
 	"files": [
+		"src",
 		"out",
 		"!**/*.tsbuildinfo"
 	],
