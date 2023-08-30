@@ -2,7 +2,7 @@
 	"name": "@rbxts/r15-ragdoll",
 	"version": "1.0.0",
 	"description": "Port of https://devforum.roblox.com/t/r15-rthro-ragdolls/338580",
-	"main": "out/init.lua",
+	"main": "src/init.lua",
 	"scripts": {
 		"build": "rbxtsc",
 		"watch": "rbxtsc -w",
@@ -21,10 +21,9 @@
 		}
 	],
 	"license": "ISC",
-	"types": "out/index.d.ts",
+	"types": "src/index.d.ts",
 	"files": [
 		"src",
-		"out",
 		"!**/*.tsbuildinfo"
 	],
 	"publishConfig": {
