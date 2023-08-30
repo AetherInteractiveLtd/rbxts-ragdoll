@@ -20,27 +20,32 @@ local buildCollisionFilters = require(script:WaitForChild("buildCollisionFilters
 			...
 		}
 --]]
-function buildAttachmentMap(character)
+local function buildAttachmentMap(character)
 	local attachmentMap = {}
 
 	-- NOTE: GetConnectedParts doesn't work until parts have been parented to Workspace, so
 	-- we can't use it (unless we want to have that silly restriction for creating ragdolls)
 	for _, part in pairs(character:GetChildren()) do
-		if part:IsA("BasePart") then
-			for _, attachment in pairs(part:GetChildren()) do
-				if attachment:IsA("Attachment") then
-					local jointName = attachment.Name:match("^(.+)RigAttachment$")
-					local joint = jointName and attachment.Parent:FindFirstChild(jointName) or nil
+		if not part:IsA("BasePart") then return end
 
-					if joint then
-						attachmentMap[attachment.Name] = {
-							Joint = joint,
-							Attachment0 = joint.Part0[attachment.Name];
-							Attachment1 = joint.Part1[attachment.Name];
-						}
-					end
-				end
-			end
+		for _, attachment in pairs(part:GetChildren()) do
+			if not attachment:IsA("Attachment") then return end
+
+			local jointName = attachment.Name:match("^(.+)RigAttachment$")
+			local joint = jointName and attachment.Parent:FindFirstChild(jointName) or nil
+
+			if not joint then return end
+
+			local Attachment0 = joint.Part0:FindFirstChild(attachment.Name);
+			local Attachment1 = joint.Part1:FindFirstChild(attachment.Name);
+
+			if not Attachment0 or not Attachment1 then return end
+
+			attachmentMap[attachment.Name] = {
+				Joint = joint,
+				Attachment0 = Attachment0;
+				Attachment1 = Attachment1;
+			}
 		end
 	end
 
