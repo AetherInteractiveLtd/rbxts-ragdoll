@@ -72,6 +72,7 @@ return function(attachmentMap)
 	for attachmentName, jointData in pairs(attachmentMap) do
 		if jointData.Joint.Name ~= "Root" then
 			local ragdollConstraint = createConstraint(jointData)
+			-- print("CONSTRAINT JOINT DATA:",jointData)
 			ragdollConstraint.Parent = ragdollConstraints
 		end
 	end

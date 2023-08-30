@@ -1,3 +1,4 @@
+local Players = game:GetService("Players")
 --[[
 	Constructs ragdoll constraints and flags some limbs so they can't collide with each other
 	for stability purposes. After this is finished, it tags the humanoid so the client/server
@@ -36,10 +37,16 @@ local function buildAttachmentMap(character)
 
 			if not joint then continue end
 
-			local Attachment0 = joint.Part0:FindFirstChild(attachment.Name);
-			local Attachment1 = joint.Part1:FindFirstChild(attachment.Name);
+			local Attachment0 = joint.Part0:WaitForChild(attachment.Name,1);
+			local Attachment1 = joint.Part1:WaitForChild(attachment.Name,1);
 
-			if not Attachment0 or not Attachment1 then continue end
+			if not Attachment0 or not Attachment1 then
+				local missing = ""
+				if not Attachment0 then missing ..= "0" end
+				if not Attachment1 then missing ..= "1" end
+				-- print("THESE ATTACHMENTS WERE NOT FOUND:",attachment.Name,missing)
+				continue
+			end
 
 			attachmentMap[attachment.Name] = {
 				Joint = joint,
@@ -52,9 +59,7 @@ local function buildAttachmentMap(character)
 	return attachmentMap
 end
 
-return function(humanoid)
-	local character = humanoid.Parent
-
+local function BeginBuildRagdoll(humanoid: Humanoid, character)
 	-- Trying to recover from broken joints is not fun. It's impossible to reattach things like
 	-- armor and tools in a generic way that works across all games, so we just prevent that
 	-- from happening in the first place.
@@ -75,4 +80,28 @@ return function(humanoid)
 
 	collisionFilters.Parent = ragdollConstraints
 	ragdollConstraints.Parent = character
+end
+
+return function(humanoid)
+	local character = humanoid.Parent
+	local player = Players:GetPlayerFromCharacter(character)
+
+	if player and not player:HasAppearanceLoaded() then
+		local thread
+		local connection = player.CharacterAppearanceLoaded:Once(function()
+			BeginBuildRagdoll(humanoid, character)
+			
+			if not coroutine.status(thread) == "running" then
+				coroutine.close(thread)
+			end
+		end)
+		
+		thread = task.delay(5, function()
+			connection:Disconnect()
+		end)
+	else
+		task.defer(function()
+			BeginBuildRagdoll(humanoid, character)
+		end)
+	end
 end

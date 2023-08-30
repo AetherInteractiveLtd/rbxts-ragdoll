@@ -16,6 +16,11 @@ function SetRagdollEnabled(humanoid, isEnabled)
 	for _, constraint in pairs(ragdollConstraints:GetChildren()) do
 		if constraint:IsA("Constraint") then
 			local rigidJoint = constraint.RigidJoint.Value
+			if not rigidJoint then
+				-- print("RIGIDJOINT DOES NOT EXIST:",constraint.Name)
+				continue
+			end
+			
 			local expectedValue = (not isEnabled) and constraint.Attachment1.Parent or nil
 
 			if rigidJoint.Part1 ~= expectedValue then
