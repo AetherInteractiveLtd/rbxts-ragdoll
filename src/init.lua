@@ -20,7 +20,7 @@ function SetRagdollEnabled(humanoid, isEnabled)
 				-- print("RIGIDJOINT DOES NOT EXIST:",constraint.Name)
 				continue
 			end
-			
+
 			local expectedValue = (not isEnabled) and constraint.Attachment1.Parent or nil
 
 			if rigidJoint.Part1 ~= expectedValue then
@@ -45,5 +45,5 @@ end
 return {
 	BuildRagdollConstraints = BuildRagdollConstraints,
 	SetRagdollEnabled = SetRagdollEnabled,
-	SetRagdollOwnership = SetRagdollOwnership
+	SetRagdollOwnership = SetRagdollOwnership,
 }

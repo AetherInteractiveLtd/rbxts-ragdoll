@@ -81,7 +81,6 @@ function getLimbs(characterRoot, attachmentMap)
 
 			table.insert(limbs[limbType], part)
 
-			local limbData = limbs[limbType]
 			if limbType ~= lastLimb then
 				limbParents[limbType] = limbParents[limbType] or {}
 				if lastLimb then
