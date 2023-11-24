@@ -38,8 +38,7 @@ local function buildAttachmentMap(character)
 
 			local jointName = attachment.Name:match("^(.+)RigAttachment$")
 			local joint = jointName and attachment.Parent:FindFirstChild(jointName) or nil
-
-			if not joint then
+			if not joint or not joint.Part0 or not joint.Part1 then
 				continue
 			end
 
